@@ -1,2 +1,2 @@
-# gulp-template
-template for gulp
+# carusel
+carusel component
