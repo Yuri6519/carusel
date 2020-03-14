@@ -1,20 +1,36 @@
 (function() {
+  // count of whole visible items
+  const ITEMS_COUNT = 3; // = @item-count from main.less
+
   // initial array (can be get from server? storage...)
   const items = document.querySelectorAll(".carusel__item");
-  const firstIndex = 0;
-  const lastIndex = items.length - 1;
-  let activeIndex = firstIndex;
 
   // carusel list
   const caruselList = document.querySelector(".carusel__list");
 
+  // wrapper
+  const wrapper = document.querySelector(".carusel__wrapper");
+
   // buttons
   const buttons = document.querySelectorAll(".carusel__arrow");
 
+  // first active index
+  const firstIndex = 0;
+
+  //last index
+  const lastIndex = items.length - ITEMS_COUNT;
+  
+  // active index
+  let activeIndex = firstIndex;
+  
+  // kt debends on division result
+  let kt = wrapper.offsetWidth / items[lastIndex].offsetWidth - ITEMS_COUNT;
+
   const move = index => {
     if (index == null) return;
-    const width = items[activeIndex] && items[activeIndex].offsetWidth;
-    caruselList.style.left = parseInt(-width * index) + "px";
+    let width = (items[activeIndex] && items[activeIndex].offsetWidth) * index;
+    width = activeIndex === lastIndex ? width - items[activeIndex].offsetWidth * kt : width;
+    caruselList.style.left = parseInt(-width) + "px";
   };
 
   for (const button of buttons) {
@@ -24,35 +40,18 @@
   }
 
   const handleClick = evt => {
-    const forward = evt.target.classList.contains("carusel_arrow-left");
-    // const width = items[activeIndex] && items[activeIndex].offsetWidth;
-
-    // let index = forward
-    //   ? activeIndex < lastIndex
-    //     ? ++activeIndex
-    //     : null
-    //   : undefined;
-
-    // index = undefined
-    //   ? activeIndex > firstIndex
-    //     ? --activeIndex
-    //     : null
-    //   : null;
-
-    // move(index);
-
+    const forward = evt.target.classList.contains("carusel_arrow-right");
     if (forward) {
       if (activeIndex < lastIndex) {
-        // крутим влево
-        move(++activeIndex);
-        // caruselList.style.left = parseInt(-width * ++activeIndex) + "px";
+        activeIndex = activeIndex + ITEMS_COUNT;
+        activeIndex = activeIndex < lastIndex ? activeIndex : lastIndex;
       }
     } else {
       if (activeIndex > firstIndex) {
-        // крутим вправо
-        move(--activeIndex);
-        // caruselList.style.left = parseInt(-width * --activeIndex) + "px";
+        activeIndex = activeIndex - ITEMS_COUNT;
+        activeIndex = activeIndex > firstIndex ? activeIndex : firstIndex;
       }
     }
+    move(activeIndex);
   };
 })();

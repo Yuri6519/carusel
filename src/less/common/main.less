@@ -1,6 +1,10 @@
 @item-width: 130px;
-@wrapper-width: @item-width * 3;
-@container-width: @wrapper-width + @wrapper-width * 20 / 100;
+@item-count: 3; // === ITEMS_COUNT from main.js
+@item-visible-part: @item-width / 2;
+@wrapper-width: @item-width * @item-count + @item-visible-part; 
+@container-width: @wrapper-width + @wrapper-width * 20 / 100; // +20%
+@carusel-trans-time: .5s; 
+@carusel-trans-func: ease-in-out; 
 
 @bg-color: #eee;
 @brd-color: #ccc;
@@ -32,15 +36,25 @@
   left: 0;
   display: flex;
   justify-content: flex-start;
-  transition: all 0.5s linear;
+  transition: all @carusel-trans-time @carusel-trans-func;
 }
 
 .carusel__item {
+  position: relative;
   width: @item-width;
   height: @item-width;
 
   img {
+    position: absolute;
     display: block;
+    top: 0;
+    left: 0;
+    transition: all .2s ease-in;
+
+    &:hover {
+      top: -5px;
+      cursor: pointer;
+    }
   }
 }
 
